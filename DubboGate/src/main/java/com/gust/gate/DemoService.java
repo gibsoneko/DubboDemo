@@ -1,4 +1,4 @@
-package com.gust;
+package com.gust.gate;
 
 /**
  * @ClassName: DemoService

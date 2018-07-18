@@ -1,4 +1,6 @@
-package com.gust;
+package com.gust.dubbo.provider;
+
+import com.gust.gate.DemoService;
 
 /**
  * @ClassName: DemoServiceImpl

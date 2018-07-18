@@ -3,6 +3,8 @@ package com.gust;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.ServiceConfig;
+import com.gust.dubbo.provider.DemoServiceImpl;
+import com.gust.gate.DemoService;
 
 import java.io.IOException;
 
