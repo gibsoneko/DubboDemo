@@ -55,6 +55,7 @@
 	<!-- server：协议的服务器端实现类型，比如：dubbo协议的mina,netty等，http协议的jetty,servlet等 默认：dubbo协议缺省为netty，http协议缺省为servlet -->
 	<!-- client：协议的客户端实现类型，比如：dubbo协议的mina,netty等 默认：dubbo协议缺省为netty -->
 	<!-- dispatcher：协议的消息派发方式，用于指定线程模型，比如：dubbo协议的all, direct, message, execution, connection等 默认： dubbo协议缺省为all -->
+	<!-- optimizer：提升序列化速度的回调机制 例如：使用Kryo和FST时，将需要被序列化的类注册到dubbo系统 -->
 	<dubbo:protocol name="dubbo" port="20880" />
 
 	<!-- 声明需要暴露的服务接口 -->
@@ -90,6 +91,10 @@
 	<!-- layer：服务提供者所在的分层。如：biz、dao、intl:web、china:acton  -->
 	<!-- register：该协议的服务是否注册到注册中心 默认：true -->
 	<dubbo:service interface="com.gust.gate.DemoService" ref="demoService" />
+
+	<!-- protocol：监控中心协议，如果为protocol="registry"，表示从注册中心发现监控中心地址，否则直连监控中心 -->
+	<!-- address：直连监控中心服务器地址，address="10.20.130.230:12080" 默认：N/A -->
+	<dubbo:monitor protocol="registry" />
 
 	<!-- 和本地bean一样实现服务 -->
 	<bean id="demoService" class="com.gust.dubbo.provider.DemoServiceImpl" />
