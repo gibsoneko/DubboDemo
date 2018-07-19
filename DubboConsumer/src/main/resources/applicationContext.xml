@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- name（必填）：当前应用名称，用于注册中心计算应用间依赖关系，注意：消费者和提供者应用名不要一样，此参数不是匹配条件，你当前项目叫什么名字就填什么，和提供者消费者角色无关 -->
+	<!-- version： 当前应用的版本 -->
+	<!-- owner：应用负责人，用于服务治理，请填写负责人公司邮箱前缀 -->
+	<!-- organization：组织名称(BU或部门)，用于注册中心区分服务来源，此配置项建议不要使用autoconfig，直接写死在配置中，比如china,intl,itu,crm,asc,dw,aliexpress等 -->
+	<!-- architecture：用于服务分层对应的架构。如，intl、china。不同的架构使用不同的分层 -->
+	<!-- environment：应用环境，如：develop/test/product，不同环境使用不同的缺省值，以及作为只用于开发测试功能的限制条件 -->
+	<!-- compiler：Java字节码编译器，用于动态类的生成，可选：jdk或javassist -->
+	<!-- logger：日志输出方式，可选：slf4j,jcl,log4j,jdk -->
+	<dubbo:application name="first-dubbo-consumer" />
+
+	<!-- id：注册中心引用BeanId，可以在<dubbo:service registry="">或<dubbo:reference registry="">中引用此ID -->
+	<!-- address（必填）：注册中心服务器地址，如果地址没有端口缺省为9090，同一集群内的多个地址用逗号分隔，如：ip:port,ip:port，不同集群的注册中心，请配置多个<dubbo:registry>标签 -->
+	<!-- protocol：注同中心地址协议，支持dubbo, http, local三种协议，分别表示，dubbo地址，http地址，本地注册中心 默认：dubbo -->
+	<!-- port：注册中心缺省端口，当address没有带端口时使用此端口做为缺省值 默认：9090 -->
+	<!-- username 登录注册中心用户名，如果注册中心不需要验证可不填 -->
+	<!-- password：登录注册中心密码，如果注册中心不需要验证可不填 -->
+	<!-- transport：网络传输方式，可选mina,netty 默认：netty -->
+	<!-- timeout：注册中心请求超时时间(毫秒) 默认：5000 -->
+	<!-- session：注册中心会话超时时间(毫秒)，用于检测提供者非正常断线后的脏数据，比如用心跳检测的实现，此时间就是心跳间隔，不同注册中心实现不一样 默认：60000 -->
+	<!-- file：使用文件缓存注册中心地址列表及服务提供者列表，应用重启时将基于此文件恢复，注意：两个注册中心不能使用同一文件存储 -->
+	<!-- wait：停止时等待通知完成时间(毫秒) 默认：0 -->
+	<!-- check：注册中心不存在时，是否报错 默认：true -->
+	<!-- register：是否向此注册中心注册服务，如果设为false，将只订阅，不注册 默认：true -->
+	<!-- subscribe：是否向此注册中心订阅服务，如果设为false，将只注册，不订阅 默认：true -->
+	<!-- dynamic：服务是否动态注册，如果设为false，注册后将显示后disable状态，需人工启用，并且服务提供者停止时，也不会自动取消册，需人工禁用 默认：true -->
+	<!-- queues：线程池队列大小，当线程池满时，排队等待执行的队列大小，建议不要设置，当线程程池时应立即失败，重试其它服务提供机器，而不是排队，除非有特殊需求。默认：0 -->
+	<!-- charset：序列化编码 默认：UTF-8 -->
+	<!-- buffer：网络读写缓冲区大小 默认：8192 -->
+	<!-- heartbeat：心跳间隔，对于长连接，当物理层断开时，比如拔网线，TCP的FIN消息来不及发送，对方收不到断开事件，此时需要心跳来帮助检查连接是否已断开 默认：0 -->
+	<!-- telnet：所支持的telnet命令，多个命令用逗号分隔 -->
+	<!-- register：该协议的服务是否注册到注册中心 默认：true -->
+	<!-- contextpath：默认：缺省为空串 -->
+	<dubbo:registry address="zookeeper://localhost:2181" file="DubboConsumer/output/dubbo.cache"/>
+
+	<!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+	<!-- id（必填）：服务引用BeanId -->
+	<!-- interface（必填）：服务接口名 -->
+	<!-- version：服务版本，与服务提供者的版本一致 -->
+	<!-- group：服务分组，当一个接口有多个实现，可以用分组区分，必需和服务提供方一致 -->
+	<!-- timeout：服务方法调用超时时间(毫秒) 默认：使用<dubbo:consumer>的timeout -->
+	<!-- retries：远程服务调用重试次数，不包括第一次调用，不需要重试请设为0 默认：使用<dubbo:consumer>的retries -->
+	<!-- connections：对每个提供者的最大连接数，rmi、http、hessian等短连接协议表示限制连接数，dubbo等长连接协表示建立的长连接个数 默认：使用<dubbo:consumer>的connections -->
+	<!-- loadbalance：负载均衡策略，可选值：random,roundrobin,leastactive，分别表示：随机，轮循，最少活跃调用 默认：使用<dubbo:consumer>的loadbalance -->
+	<!-- async：是否异步执行，不可靠异步，只是忽略返回值，不阻塞执行线程 默认：使用<dubbo:consumer>的async -->
+	<!-- generic：是否缺省泛化接口，如果为泛化接口，将返回GenericService 默认：使用<dubbo:consumer>的generic -->
+	<!-- check：启动时检查提供者是否存在，true报错，false忽略 默认：使用<dubbo:consumer>的check -->
+	<!-- url：点对点直连服务提供者地址，将绕过注册中心 -->
+	<!-- stub：服务接口客户端本地代理类名，用于在客户端执行本地逻辑，如本地缓存等，该本地代理类的构造函数必须允许传入远程代理对象，构造函数如：public XxxServiceLocal(XxxService xxxService) -->
+	<!-- mock：服务接口调用失败Mock实现类名，该Mock类必须有一个无参构造函数，与Local的区别在于，Local总是被执行，而Mock只在出现非业务异常(比如超时，网络异常等)时执行，Local在远程调用之前执行，Mock在远程调用后执行 -->
+	<!-- cache：以调用参数为key，缓存返回结果，可选：lru, threadlocal, jcache等 -->
+	<!-- validation：是否启用JSR303标准注解验证，如果启用，将对方法参数上的注解进行校验 -->
+	<!-- proxy：选择动态代理实现策略，可选：javassist, jdk 默认：javassist -->
+	<!-- client：客户端传输类型设置，如Dubbo协议的netty或mina -->
+	<!-- registry：从指定注册中心注册获取服务列表，在多个注册中心时使用，值为<dubbo:registry>的id属性，多个注册中心ID用逗号分隔 默认：从所有注册中心获服务列表后合并结果 -->
+	<!-- owner：调用服务负责人，用于服务治理，请填写负责人公司邮箱前缀 -->
+	<!-- actives：每服务消费者每服务每方法最大并发调用数 默认：0 -->
+	<!-- cluster：集群方式，可选：failover/failfast/failsafe/failback/forking 默认：failover -->
+	<!-- filter：服务消费方远程调用过程拦截器名称，多个名称用逗号分隔 默认：default -->
+	<!-- listener：服务消费方引用服务监听器名称，多个名称用逗号分隔 默认：default -->
+	<!-- layer：服务调用者所在的分层。如：biz、dao、intl:web、china:acton -->
+	<!-- init：是否在afterPropertiesSet()时饥饿初始化引用，否则等到有人注入或引用该实例时再初始化 默认：true -->
+	<!-- protocol：只调用指定协议的服务提供方，其它协议忽略 -->
+	<dubbo:reference id="demoService" interface="com.gust.gate.DemoService" />
+
+</beans>
